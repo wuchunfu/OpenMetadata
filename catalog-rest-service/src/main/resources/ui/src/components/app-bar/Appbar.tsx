@@ -66,119 +66,130 @@ const Appbar: React.FC = (): JSX.Element => {
   return (
     <>
       {isAuthenticatedRoute && isSignedIn ? (
-        <div className="tw-h-14 tw-py-2 tw-px-5 tw-border-b-2 tw-border-separator">
-          <div className="tw-flex tw-items-center tw-flex-row tw-justify-between tw-flex-nowrap">
-            <div className="tw-flex tw-items-center tw-flex-row tw-justify-between tw-flex-nowrap tw-mr-auto">
-              <NavLink to="/">
-                <SVGIcons
-                  alt="OpenMetadata Logo"
-                  icon={Icons.LOGO_SMALL}
-                  width="30"
-                />
-              </NavLink>
-              <div
-                className="tw-flex-none tw-relative tw-pl-5 "
-                data-testid="appbar-item">
-                <span className="fa fa-search tw-absolute tw-block tw-z-10 tw-w-9 tw-h-8 tw-leading-8 tw-text-center tw-pointer-events-none tw-text-gray-400" />
-                <input
-                  className="tw-relative search-grey tw-rounded tw-border tw-border-main tw-bg-body-main focus:tw-outline-none tw-pl-8 tw-py-1"
-                  type="text"
-                  value={searchValue || ''}
-                  onChange={(e) => {
-                    setSearchValue(e.target.value);
-                  }}
-                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    const target = e.target as HTMLInputElement;
-                    if (e.key === 'Enter') {
-                      setIsOpen(false);
-                      history.push(getExplorePathWithSearch(target.value));
-                    }
-                  }}
-                />
-                {searchValue &&
-                  (isInPageSearchAllowed(location.pathname) ? (
-                    <SearchOptions
-                      isOpen={isOpen}
-                      options={inPageSearchOptions(location.pathname)}
-                      searchText={searchValue}
-                      selectOption={(text) => {
-                        appState.inPageSearchText = text;
-                      }}
-                      setIsOpen={setIsOpen}
-                    />
-                  ) : (
-                    <Suggestions
-                      isOpen={isOpen}
-                      searchText={searchValue}
-                      setIsOpen={setIsOpen}
-                    />
-                  ))}
-              </div>
-              <div className="tw-ml-9">
-                <NavLink
-                  className="tw-nav focus:tw-no-underline"
-                  data-testid="appbar-item"
-                  style={navStyle(location.pathname.startsWith('/explore'))}
-                  to={{
-                    pathname: '/explore',
-                  }}>
-                  Explore
+        <>
+          <div className="tw-h-14 tw-py-2 tw-px-5 tw-border-b-2 tw-border-separator">
+            <div className="tw-flex tw-items-center tw-flex-row tw-justify-between tw-flex-nowrap">
+              <div className="tw-flex tw-items-center tw-flex-row tw-justify-between tw-flex-nowrap tw-mr-auto">
+                <NavLink to="/">
+                  <SVGIcons
+                    alt="OpenMetadata Logo"
+                    icon={Icons.LOGO_SMALL}
+                    width="30"
+                  />
                 </NavLink>
+                <div
+                  className="tw-flex-none tw-relative tw-pl-5 "
+                  data-testid="appbar-item">
+                  <span className="fa fa-search tw-absolute tw-block tw-z-10 tw-w-9 tw-h-8 tw-leading-8 tw-text-center tw-pointer-events-none tw-text-gray-400" />
+                  <input
+                    className="tw-relative search-grey tw-rounded tw-border tw-border-main tw-bg-body-main focus:tw-outline-none tw-pl-8 tw-py-1"
+                    type="text"
+                    value={searchValue || ''}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                    }}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                      const target = e.target as HTMLInputElement;
+                      if (e.key === 'Enter') {
+                        setIsOpen(false);
+                        history.push(getExplorePathWithSearch(target.value));
+                      }
+                    }}
+                  />
+                  {searchValue &&
+                    (isInPageSearchAllowed(location.pathname) ? (
+                      <SearchOptions
+                        isOpen={isOpen}
+                        options={inPageSearchOptions(location.pathname)}
+                        searchText={searchValue}
+                        selectOption={(text) => {
+                          appState.inPageSearchText = text;
+                        }}
+                        setIsOpen={setIsOpen}
+                      />
+                    ) : (
+                      <Suggestions
+                        isOpen={isOpen}
+                        searchText={searchValue}
+                        setIsOpen={setIsOpen}
+                      />
+                    ))}
+                </div>
+                <div className="tw-ml-9">
+                  <NavLink
+                    className="tw-nav focus:tw-no-underline"
+                    data-testid="appbar-item"
+                    style={navStyle(location.pathname.startsWith('/explore'))}
+                    to={{
+                      pathname: '/explore',
+                    }}>
+                    Explore
+                  </NavLink>
+                  <DropDown
+                    dropDownList={navLinkSettings}
+                    label="Settings"
+                    type="link"
+                  />
+                </div>
+              </div>
+              <NavLink
+                className="tw-nav focus:tw-no-underline"
+                data-testid="appbar-item"
+                style={navStyle(location.pathname.startsWith('/documents'))}
+                target="_blank"
+                to={{
+                  pathname: 'https://docs.open-metadata.org/',
+                }}>
+                <SVGIcons
+                  alt="Doc icon"
+                  className="tw-align-middle tw--mt-0.5 tw-mr-0.5"
+                  icon="doc"
+                  width="12"
+                />
+                <span>Docs</span>
+              </NavLink>
+              <NavLink
+                className="tw-nav focus:tw-no-underline"
+                data-testid="appbar-item"
+                style={navStyle(location.pathname.startsWith('/docs'))}
+                to={{
+                  pathname: '/docs',
+                }}>
+                <SVGIcons
+                  alt="API icon"
+                  className="tw-align-middle tw--mt-0.5 tw-mr-0.5"
+                  icon="api"
+                  width="12"
+                />
+                <span>API</span>
+              </NavLink>
+              <div data-testid="dropdown-profile">
                 <DropDown
-                  dropDownList={navLinkSettings}
-                  label="Settings"
+                  dropDownList={[
+                    {
+                      name: 'Logout',
+                      to: '#/action-1',
+                      disabled: false,
+                      method: userSignOut,
+                    },
+                  ]}
+                  icon={IconDefaultUserProfile}
+                  label=""
                   type="link"
                 />
               </div>
             </div>
-            <NavLink
-              className="tw-nav focus:tw-no-underline"
-              data-testid="appbar-item"
-              style={navStyle(location.pathname.startsWith('/documents'))}
-              target="_blank"
-              to={{
-                pathname: 'https://docs.open-metadata.org/',
-              }}>
-              <SVGIcons
-                alt="Doc icon"
-                className="tw-align-middle tw--mt-0.5 tw-mr-0.5"
-                icon="doc"
-                width="12"
-              />
-              <span>Docs</span>
-            </NavLink>
-            <NavLink
-              className="tw-nav focus:tw-no-underline"
-              data-testid="appbar-item"
-              style={navStyle(location.pathname.startsWith('/docs'))}
-              to={{
-                pathname: '/docs',
-              }}>
-              <SVGIcons
-                alt="API icon"
-                className="tw-align-middle tw--mt-0.5 tw-mr-0.5"
-                icon="api"
-                width="12"
-              />
-              <span>API</span>
-            </NavLink>
-            <div data-testid="dropdown-profile">
-              <DropDown
-                dropDownList={[
-                  {
-                    name: 'Logout',
-                    to: '#/action-1',
-                    disabled: false,
-                    method: userSignOut,
-                  },
-                ]}
-                icon={IconDefaultUserProfile}
-                label=""
-                type="link"
-              />
-            </div>
           </div>
-        </div>
+          <div className="tw-py-2 tw-pl-6 tw-border-b tw-border-separator sub-header">
+            <SVGIcons alt="home" icon="homeb" width="20" />
+            <span className="tw-px-2 tw-text-grey-muted tw-text-lg tw-leading-4 tw-align-middle tw-font-medium">
+              »
+            </span>
+            <span className="tw-text-base tw-align-middle tw-font-medium">
+              Explore
+            </span>
+          </div>
+        </>
       ) : null}
     </>
   );

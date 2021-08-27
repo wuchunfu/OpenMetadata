@@ -313,7 +313,7 @@ const ExplorePage: React.FC = (): React.ReactElement => {
             <button onClick={() => handleOrder('desc')}>
               <i
                 className={classNames(
-                  'fas fa-sort-amount-down-alt tw-text-base tw-text-primary'
+                  'fas fa-long-arrow-alt-up tw-text-base tw-text-primary'
                 )}
               />
             </button>
@@ -321,7 +321,7 @@ const ExplorePage: React.FC = (): React.ReactElement => {
             <button onClick={() => handleOrder('asc')}>
               <i
                 className={classNames(
-                  'fas fa-sort-amount-up-alt tw-text-base tw-text-primary'
+                  'fas fa-long-arrow-alt-down tw-text-base tw-text-primary'
                 )}
               />
             </button>

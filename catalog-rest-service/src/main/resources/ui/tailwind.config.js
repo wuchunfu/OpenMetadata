@@ -71,6 +71,7 @@ module.exports = {
       },
       boxShadow: {
         modal: '1px 1px 5px rgba(0, 0, 0, 0.2)',
+        separator: '1px 1px 5px rgba(113, 71, 232, 0.25)',
       },
       colors: {
         'grey-body': textBody,

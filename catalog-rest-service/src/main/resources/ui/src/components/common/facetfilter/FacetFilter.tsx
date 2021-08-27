@@ -55,7 +55,7 @@ const FacetFilter: FunctionComponent<FacetProp> = ({
   };
   const getSeparator = (length: number, index: number) => {
     return length !== 1 && index < length - 1 ? (
-      <div className="seperator tw-mb-4 tw--mx-4 " />
+      <div className="seperator tw-mb-4" />
     ) : null;
   };
   const sortBuckets = (buckets: Array<Bucket>) => {

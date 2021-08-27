@@ -413,6 +413,11 @@
   font-weight: 500;
 }
 
+.sub-header + .page-container .side-panel {
+  top: 97px;
+  height: calc(100vh - 97px);
+}
+
 .search-wrapper + .page-container .side-panel {
   top: 102px;
   height: calc(100vh - 102px);

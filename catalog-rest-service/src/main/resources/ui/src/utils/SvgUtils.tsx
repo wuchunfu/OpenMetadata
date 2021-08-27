@@ -6,6 +6,7 @@ import IconSuccess from '../assets/svg/check.svg';
 import IconAsstest from '../assets/svg/data-assets.svg';
 import IconDoc from '../assets/svg/doc.svg';
 import IconError from '../assets/svg/error.svg';
+import IconHomeB from '../assets/svg/home.svg';
 import IconCheckCircle from '../assets/svg/ic-check-circle.svg';
 import IconDelete from '../assets/svg/ic-delete.svg';
 import IconDownArrow from '../assets/svg/ic-down-arrow.svg';
@@ -106,6 +107,7 @@ export const Icons = {
   TERMS: 'terms',
   DOC: 'doc',
   API: 'api',
+  HOMEB: 'homeb',
 };
 
 const SVGIcons: FunctionComponent<Props> = ({
@@ -314,6 +316,10 @@ const SVGIcons: FunctionComponent<Props> = ({
       break;
     case Icons.API:
       IconComponent = IconAPI;
+
+      break;
+    case Icons.HOMEB:
+      IconComponent = IconHomeB;
 
       break;
 
