@@ -50,12 +50,13 @@ declare module 'Models' {
 
   export type ServiceOption = {
     id: string;
+    brokers?: Array<string>;
     description: string;
     ingestionSchedule?: {
       repeatFrequency: string;
       startDate: string;
     };
-    jdbc: { connectionUrl: string; driverClass: string };
+    jdbc?: { connectionUrl: string; driverClass: string };
     name: string;
     serviceType: string;
   };
@@ -221,7 +222,7 @@ declare module 'Models' {
   export type ClientAuth = {
     authority: string;
     client_id: string;
-    provider?: 'google' | 'okta' | 'github';
+    provider?: 'google' | 'okta' | 'auth0'; // TODO: add 'github' after adding support for Github SSO
     callbackUrl?: string;
     signingIn?: boolean;
   };

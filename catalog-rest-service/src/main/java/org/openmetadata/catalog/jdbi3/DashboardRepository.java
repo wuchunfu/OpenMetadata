@@ -138,6 +138,11 @@ public abstract class DashboardRepository {
     if (storedDashboard.getDescription() == null || storedDashboard.getDescription().isEmpty()) {
       storedDashboard.withDescription(updatedDashboard.getDescription());
     }
+    //update the display name from source
+    if (updatedDashboard.getDisplayName() != null && !updatedDashboard.getDisplayName().isEmpty()) {
+      storedDashboard.withDisplayName(updatedDashboard.getDisplayName());
+    }
+
     dashboardDAO().update(storedDashboard.getId().toString(), JsonUtils.pojoToJson(storedDashboard));
 
     // Update owner relationship
@@ -147,7 +152,8 @@ public abstract class DashboardRepository {
     // Service can't be changed in update since service name is part of FQN and
     // change to a different service will result in a different FQN and creation of a new database under the new service
     storedDashboard.setService(service);
-    applyTags(updatedDashboard);
+    storedDashboard.setCharts(updatedDashboard.getCharts());
+    updateChartRelationships(storedDashboard);
 
     return new PutResponse<>(Response.Status.OK, storedDashboard);
   }
@@ -197,6 +203,7 @@ public abstract class DashboardRepository {
   }
 
   private Dashboard setFields(Dashboard dashboard, Fields fields) throws IOException {
+    dashboard.setDisplayName(dashboard.getDisplayName());
     dashboard.setOwner(fields.contains("owner") ? getOwner(dashboard) : null);
     dashboard.setService(fields.contains("service") ? getService(dashboard) : null);
     dashboard.setFollowers(fields.contains("followers") ? getFollowers(dashboard) : null);
@@ -331,6 +338,26 @@ public abstract class DashboardRepository {
 
     // Add tag to dashboard relationship
     applyTags(dashboard);
+  }
+
+  private void updateChartRelationships(Dashboard dashboard) throws IOException  {
+    String dashboardId = dashboard.getId().toString();
+
+    // Add relationship from dashboard to chart
+    if (dashboard.getCharts() != null) {
+      // Remove any existing charts associated with this dashboard
+      List<Chart> existingCharts = getCharts(dashboard);
+      if (existingCharts != null) {
+        for (Chart chart: existingCharts) {
+          relationshipDAO().delete(dashboardId, chart.getId().toString(), Relationship.CONTAINS.ordinal());
+        }
+      }
+
+      for (EntityReference chart : dashboard.getCharts()) {
+        relationshipDAO().insert(dashboardId, chart.getId().toString(), Entity.DASHBOARD, Entity.CHART,
+                Relationship.CONTAINS.ordinal());
+      }
+    }
   }
 
   private Dashboard validateDashboard(String id) throws IOException {

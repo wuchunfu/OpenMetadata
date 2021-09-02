@@ -20,6 +20,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 
 from pydantic import BaseModel
 
+from metadata.generated.schema.type.entityReference import EntityReference
 from metadata.ingestion.models.json_serializable import JsonSerializable
 
 DESCRIPTION_NODE_LABEL_VAL = 'Description'
@@ -218,20 +219,24 @@ class DashboardOwner(BaseModel):
 class Chart(BaseModel):
     """Chart"""
     name: str
+    displayName:str
     description: str
     chart_type: str
     url: str
-    owners: List[DashboardOwner]
-    lastModified: int
-    datasource_fqn: str
-    custom_props: Dict[Any, Any]
+    owners: List[DashboardOwner] = None
+    lastModified: int = None
+    datasource_fqn: str = None
+    service: EntityReference
+    custom_props: Dict[Any, Any] = None
 
 
 class Dashboard(BaseModel):
     """Dashboard"""
     name: str
+    displayName: str
     description: str
     url: str
-    owners: List
-    charts: List
-    lastModified: int
+    owners: List[DashboardOwner] = None
+    charts: List[str]
+    service: EntityReference
+    lastModified: int = None
