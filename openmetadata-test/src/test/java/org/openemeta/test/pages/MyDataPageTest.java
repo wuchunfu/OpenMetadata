@@ -15,11 +15,11 @@ public class MyDataPageTest {
     // BEFORE RUNNING THIS TEST
 
     private static final String homeXPath = "/html/body/div/div/div[2]/div[1]/div/div[1]/a";
-    private static final Integer sleepTime = 300;
+    private static final Integer sleepTime = 100;
 
     @Test
     public void checkMyDataPage() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/linux/chromedriver");
         WebDriver webDriver = new ChromeDriver();
         ArrayList<String> tabs = new ArrayList<>(webDriver.getWindowHandles());
         String originalHandle = webDriver.getWindowHandle();
