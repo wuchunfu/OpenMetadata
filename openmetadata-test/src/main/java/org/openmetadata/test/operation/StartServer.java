@@ -11,7 +11,7 @@ public class StartServer {
     private static final Logger LOG = Logger.getLogger(StartServer.class.getName());
 
     public static void gitClone() throws IOException, InterruptedException {
-        String[] gitClone = {"bash", "-c", "cd " + '"' + PATH + '"' + "&& git clone git@github.com:open-metadata/OpenMetadata.git"};
+        String[] gitClone = {"bash", "-c", "cd " + '"' + PATH + '"' + "&& git clone https://github.com/open-metadata/OpenMetadata.git"};
         Process processGitClone = Runtime.getRuntime().exec(gitClone);
         processGitClone.waitFor();
         LOG.info("Git Clone Done");
