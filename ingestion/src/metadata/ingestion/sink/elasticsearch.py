@@ -145,39 +145,42 @@ class ElasticsearchSink(Sink):
             self.elasticsearch_client.indices.create(index=index_name, body=es_mapping)
 
     def write_record(self, record: Record) -> None:
-        if isinstance(record, Table):
-            table_doc = self._create_table_es_doc(record)
-            self.elasticsearch_client.index(
-                index=self.config.table_index_name,
-                id=str(table_doc.table_id),
-                body=table_doc.json(),
-            )
-        if isinstance(record, Topic):
-            topic_doc = self._create_topic_es_doc(record)
-            self.elasticsearch_client.index(
-                index=self.config.topic_index_name,
-                id=str(topic_doc.topic_id),
-                body=topic_doc.json(),
-            )
-        if isinstance(record, Dashboard):
-            dashboard_doc = self._create_dashboard_es_doc(record)
-            self.elasticsearch_client.index(
-                index=self.config.dashboard_index_name,
-                id=str(dashboard_doc.dashboard_id),
-                body=dashboard_doc.json(),
-            )
-        if isinstance(record, Pipeline):
-            pipeline_doc = self._create_pipeline_es_doc(record)
-            self.elasticsearch_client.index(
-                index=self.config.pipeline_index_name,
-                id=str(pipeline_doc.pipeline_id),
-                body=pipeline_doc.json(),
-            )
+        try:
+            if isinstance(record, Table):
+                table_doc = self._create_table_es_doc(record)
+                self.elasticsearch_client.index(
+                    index=self.config.table_index_name,
+                    id=str(table_doc.table_id),
+                    body=table_doc.json(),
+                )
+            if isinstance(record, Topic):
+                topic_doc = self._create_topic_es_doc(record)
+                self.elasticsearch_client.index(
+                    index=self.config.topic_index_name,
+                    id=str(topic_doc.topic_id),
+                    body=topic_doc.json(),
+                )
+            if isinstance(record, Dashboard):
+                dashboard_doc = self._create_dashboard_es_doc(record)
+                self.elasticsearch_client.index(
+                    index=self.config.dashboard_index_name,
+                    id=str(dashboard_doc.dashboard_id),
+                    body=dashboard_doc.json(),
+                )
+            if isinstance(record, Pipeline):
+                pipeline_doc = self._create_pipeline_es_doc(record)
+                self.elasticsearch_client.index(
+                    index=self.config.pipeline_index_name,
+                    id=str(pipeline_doc.pipeline_id),
+                    body=pipeline_doc.json(),
+                )
 
-        if hasattr(record.name, "__root__"):
-            self.status.records_written(record.name.__root__)
-        else:
-            self.status.records_written(record.name)
+            if hasattr(record.name, "__root__"):
+                self.status.records_written(record.name.__root__)
+            else:
+                self.status.records_written(record.name)
+        except Exception as e:
+            logger.error(f"Failed to ingest entity {record}")
 
     def _create_table_es_doc(self, table: Table):
         fqdn = table.fullyQualifiedName
