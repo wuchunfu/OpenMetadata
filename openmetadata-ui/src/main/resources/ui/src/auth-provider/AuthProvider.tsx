@@ -44,6 +44,7 @@ import {
 } from '../axiosAPIs/userAPI';
 import Loader from '../components/Loader/Loader';
 import { COOKIE_VERSION } from '../components/Modals/WhatsNewModal/whatsNewData';
+import { NO_AUTH } from '../constants/auth.constants';
 import { isAdminUpdated, oidcTokenKey, ROUTES } from '../constants/constants';
 import { ClientErrors } from '../enums/axios.enum';
 import { User } from '../generated/entity/teams/user';
@@ -208,7 +209,8 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({
       .then((res: AxiosResponse) => {
         const isSecureMode =
           !isNil(res.data) &&
-          Object.values(res.data).filter((item) => isNil(item)).length === 0;
+          Object.values(res.data).filter((item) => isNil(item)).length === 0 &&
+          res.data.provider !== NO_AUTH;
         if (isSecureMode) {
           const { provider, authority, clientId, callbackUrl } = res.data;
           const userConfig = getUserManagerConfig({
